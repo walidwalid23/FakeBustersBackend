@@ -1,7 +1,8 @@
 const usersCollection = require('../models/user_model');
 const jwt = require("jsonwebtoken");
 const bcrypt = require('bcrypt');
-const userSignupValidation = require('./user_validation_logic');
+const { userSignupValidation } = require('./user_validation_logic');
+const { userLoginValidation } = require('./user_validation_logic');
 
 
 async function signUp(req, res) {
@@ -48,7 +49,40 @@ async function signUp(req, res) {
         return res.status(400).json({ errorMessage: error });
     }
 
+}
+
+
+
+async function login(req, res) {
+    try {
+        //VALIDATING DATA ENTERED
+        const validationDetails = userLoginValidation(req.body);
+        if (validationDetails.error != null) {
+            return res.status(400).json({ errorMessage: validationDetails.error.details[0].message });
+        }
+
+        //CHECKING IF USERNAME EXISTS
+        const userObj = await usersCollection.findOne({ username: req.body.username });
+        if (userObj == null) { return res.status(400).json({ errorMessage: "User Not Found" }); }
+        //CHECKING IF PASSWORD IS CORRECT BCRYPT.COMPARE RETURNS BOOLEAN
+        const passIsCorrect = await bcrypt.compare(req.body.password, userObj.password);
+        if (passIsCorrect == false) { return res.status(400).json({ errorMessage: "Password Is InCorrect" }); }
+        //AT THIS POINT SINCE NO ERROR RETURNED EVERYTHING SHOULD BE CORRECT
+        //CREATE AND ASSIGN A TOKEN FOR THE USER
+        const tokenPass = process.env.token_pass;
+        const token = jwt.sign({ username: req.body.username, profileImage: imagePath },
+            tokenPass, { expiresIn: "48h" });
+        //TOKEN IS SENT IN THE HEADER OF THE RESPONSE
+        res.header("user-token", token);
+        res.status(200).json({ "successMessage": "LoggedIn successfully" });
+
+
+
+    }
+    catch (error) {
+        res.status(400).json({ errorMessage: error });
+    }
 
 }
 
-module.exports = signUp;
+module.exports = { signUpFunction: signUp, loginFunction: login };
