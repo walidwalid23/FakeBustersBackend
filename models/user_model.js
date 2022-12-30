@@ -14,10 +14,8 @@ const usersSchema = mongoose.Schema({
 
     profileImage: {
         type: String,
+        required: true
     },
-
-
-
 
 
     uploadedPosts: [String],

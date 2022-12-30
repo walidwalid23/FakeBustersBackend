@@ -4,7 +4,7 @@ const multer = require('multer');
 const theStorage = multer.diskStorage({
     //CB MEANS CALLBACK
     destination: function (req, file, cb) {
-        //YOU MUST HAVE A FOLDER WITH THIS NAME 'uploads' IN THE PROJECTS FOLDER
+        //YOU MUST HAVE A FOLDER WITH THIS NAME 'profile_images' IN THE PROJECTS FOLDER
         //cb(null,foldername)
         cb(null, 'profile_images/');
     },

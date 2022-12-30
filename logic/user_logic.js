@@ -16,7 +16,10 @@ async function signUp(req, res) {
         //CHECKING IF THE USERNAME IS REPEATED 
         const usernameRepeated = await usersCollection.findOne({ username: req.body.username });
         if (usernameRepeated) {
-            return res.status(400).json({ errorMessage: "Username Already Exists" });
+            return res.status(400).json({
+                "errorMessage": "Username Already Exists",
+                "statusCode": 400
+            });
         }
 
         //HASHING THE PASSWORD
@@ -25,7 +28,7 @@ async function signUp(req, res) {
         const hashedPassword = await bcrypt.hash(password, salt);
 
         //CREATING A NEW USER IF NO RESPONSE WAS RETURNED WHICH MEANS DATA WAS VALIDATE
-        let imagePath = (req.file) ? req.file.path : 'profile_images\\default_image.png';
+        let imagePath = (req.file) ? req.file.path : 'profile_images\\default_profile_image.png';
         const insertedObject = await usersCollection({
             username: req.body.username,
             password: hashedPassword,
@@ -41,12 +44,18 @@ async function signUp(req, res) {
             tokenPass, { expiresIn: "48h" });
         //TOKEN IS SENT IN THE HEADER OF THE RESPONSE
         res.header("user-token", token);
-        res.status(200).json({ "successMessage": "Signed Up successfully" });
+        res.status(200).json({
+            "successMessage": "Signed Up successfully",
+            "statusCode": 200
+        });
 
     }
     catch (error) {
 
-        return res.status(400).json({ errorMessage: error });
+        return res.status(400).json({
+            "errorMessage": error,
+            "statusCode": 400
+        });
     }
 
 }
@@ -63,24 +72,40 @@ async function login(req, res) {
 
         //CHECKING IF USERNAME EXISTS
         const userObj = await usersCollection.findOne({ username: req.body.username });
-        if (userObj == null) { return res.status(400).json({ errorMessage: "User Not Found" }); }
+        if (userObj == null) {
+            return res.status(400).json({
+                errorMessage: "User Not Found",
+                statusCode: 400
+            });
+        }
         //CHECKING IF PASSWORD IS CORRECT BCRYPT.COMPARE RETURNS BOOLEAN
         const passIsCorrect = await bcrypt.compare(req.body.password, userObj.password);
-        if (passIsCorrect == false) { return res.status(400).json({ errorMessage: "Password Is InCorrect" }); }
+        if (passIsCorrect == false) {
+            return res.status(400).json({
+                errorMessage: "Incorrect Password OR Username",
+                statusCode: 400
+            });
+        }
         //AT THIS POINT SINCE NO ERROR RETURNED EVERYTHING SHOULD BE CORRECT
         //CREATE AND ASSIGN A TOKEN FOR THE USER
         const tokenPass = process.env.token_pass;
-        const token = jwt.sign({ username: req.body.username, profileImage: imagePath },
+        const token = jwt.sign({ username: req.body.username, profileImage: userObj.profileImage },
             tokenPass, { expiresIn: "48h" });
         //TOKEN IS SENT IN THE HEADER OF THE RESPONSE
         res.header("user-token", token);
-        res.status(200).json({ "successMessage": "LoggedIn successfully" });
+        res.status(200).json({
+            "successMessage": "Logged In successfully",
+            "statusCode": 200
+        });
 
 
 
     }
     catch (error) {
-        res.status(400).json({ errorMessage: error });
+        res.status(400).json({
+            "errorMessage": error,
+            "statusCode": 400
+        });
     }
 
 }
