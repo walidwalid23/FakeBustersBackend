@@ -119,22 +119,26 @@ async function verifyUserToken(req, res) {
     const token = req.header('user-token');
     if (token == null) {
         return res.status(401).json({
-            errorMessage: "Access Denied",
-            statusCode: 401
+            "errorMessage": "Access Denied",
+            "statusCode": 401
         });
     }
     try {
         //Verify the token and extract the user data
         const extractedUserData = jwt.verify(token, process.env.token_pass);
         console.log("the extracted data:", extractedUserData);
+        // if it didn't throw error it means token is valid
+        res.status(200).json({
+            "successMessage": "Token is verified",
+            statusCode: 200
+        })
 
-        req.user = verified;
 
     }
     catch (err) {
         res.status(401).json({
-            errorMessage: "Invalid Token",
-            statusCode: 401
+            "errorMessage": "Invalid Token",
+            "statusCode": 401
         });
     }
 
