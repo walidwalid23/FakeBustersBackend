@@ -70,8 +70,8 @@ async function login(req, res) {
         console.log(req.body);
         if (validationDetails.error != null) {
             return res.status(400).json({
-                errorMessage: validationDetails.error.details[0].message,
-                statusCode: 400
+                "errorMessage": validationDetails.error.details[0].message,
+                "statusCode": 400
             });
         }
 
@@ -79,22 +79,22 @@ async function login(req, res) {
         const userObj = await usersCollection.findOne({ username: req.body.username });
         if (userObj == null) {
             return res.status(400).json({
-                errorMessage: "User Not Found",
-                statusCode: 400
+                "errorMessage": "User Not Found",
+                "statusCode": 400
             });
         }
         //CHECKING IF PASSWORD IS CORRECT BCRYPT.COMPARE RETURNS BOOLEAN
         const passIsCorrect = await bcrypt.compare(req.body.password, userObj.password);
         if (passIsCorrect == false) {
             return res.status(400).json({
-                errorMessage: "Incorrect Username Or Password",
-                statusCode: 400
+                "errorMessage": "Incorrect Username Or Password",
+                "statusCode": 400
             });
         }
         //AT THIS POINT SINCE NO ERROR RETURNED EVERYTHING SHOULD BE CORRECT
         //CREATE AND ASSIGN A TOKEN FOR THE USER
         const tokenPass = process.env.token_pass;
-        const token = jwt.sign({ username: req.body.username, userID: insertedObject._id },
+        const token = jwt.sign({ username: req.body.username, userID: userObj._id },
             tokenPass, { expiresIn: "48h" });
         //TOKEN IS SENT IN THE HEADER OF THE RESPONSE
         res.header("user-token", token);
@@ -107,6 +107,7 @@ async function login(req, res) {
 
     }
     catch (error) {
+        console.log("error here now" + error);
         res.status(400).json({
             "errorMessage": error,
             "statusCode": 400
@@ -117,6 +118,7 @@ async function login(req, res) {
 
 async function verifyUserToken(req, res) {
     const token = req.header('user-token');
+
     if (token == null) {
         return res.status(401).json({
             "errorMessage": "Access Denied",
@@ -129,8 +131,8 @@ async function verifyUserToken(req, res) {
         console.log("the extracted data:", extractedUserData);
         // if it didn't throw error it means token is valid
         res.status(200).json({
-            "successMessage": "Token is verified",
-            statusCode: 200
+            "successMessage": "Token is successfully verified",
+            "statusCode": 200
         })
 
 
