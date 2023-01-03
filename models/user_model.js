@@ -17,9 +17,6 @@ const usersSchema = mongoose.Schema({
         required: true
     },
 
-
-    uploadedPosts: [String],
-
     votedPosts: [String],
 
 

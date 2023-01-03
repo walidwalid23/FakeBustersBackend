@@ -87,7 +87,7 @@ async function login(req, res) {
         const passIsCorrect = await bcrypt.compare(req.body.password, userObj.password);
         if (passIsCorrect == false) {
             return res.status(400).json({
-                "errorMessage": "Incorrect Username Or Password",
+                "errorMessage": "Invalid Username Or Password",
                 "statusCode": 400
             });
         }
@@ -143,7 +143,6 @@ async function verifyUserToken(req, res) {
             "statusCode": 401
         });
     }
-
 }
 
 module.exports = {

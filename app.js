@@ -4,6 +4,7 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 require("dotenv/config");
 const userRouter = require('./routes/user_router');
+const postsRouter = require('./routes/posts_router');
 
 //RUN THE SERVER
 appServer.listen(80, () => {
@@ -22,9 +23,12 @@ appServer.use("/", express.json());
 appServer.use(express.urlencoded({ extended: true }));
 //cors allow requests to be sent to the server from another networks than the local network
 appServer.use(cors());
-//MAKING THE PROFILE IMAGES FOLDER AVAILABLE FOR ANYONE TO ACCESS THE FILES INSIDE IT
+//MAKING THE PROFILE AND POSTS IMAGES FOLDER AVAILABLE FOR ANYONE TO ACCESS THE FILES INSIDE IT
 appServer.use('/profile_images', express.static('profile_images'));
+appServer.use('/posts_images', express.static('posts_images'));
+
 
 //MAIN ROUTES
 appServer.use('/users', userRouter);
+appServer.use('/posts', postsRouter);
 

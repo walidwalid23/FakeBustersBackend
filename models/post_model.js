@@ -9,10 +9,13 @@ const postsSchema = mongoose.Schema({
         type: String,
         required: true
     },
+    brandName: {
+        type: String,
+        required: true
+    },
     postImage: {
         type: String,
         required: true,
-
     },
     postDate: {
         type: Date,
@@ -27,6 +30,11 @@ const postsSchema = mongoose.Schema({
         type: Number,
         required: true,
         default: 0
+    },
+
+    uploaderID: {
+        type: String,
+        required: true,
     },
 
 });
