@@ -43,6 +43,87 @@ async function uploadPost(req, res) {
 
 }
 
+async function findPostsByCategories(req, res) {
+    try {
+        // this is a list of categories
+        let categories = req.body.categories;
+        // if categories is undefined
+        if (!categories) {
+            return res.status(400).json({ errorMessage: "No Categories Were Given" });
+        }
+
+        //FINDING POSTS BY THE GIVEN CATEGORIES
+        let retrievedPosts = [];
+        for (let i = 0; i < categories.length; i++) {
+
+            let eachCategoryPosts = await postsCollection.find({ category: categories[i] });
+            retrievedPosts = retrievedPosts.concat(eachCategoryPosts);
+
+        }
+
+        if (retrievedPosts.length == 0) {
+            return res.status(400).json({
+                "errorMessage": "No Posts Were Found",
+                "statusCode": 400
+            });
+        }
+
+        res.status(200).json({
+            "successMessage": "Posts Retrieved successfully",
+            "posts": retrievedPosts,
+            "statusCode": 200
+        });
+
+    }
+    catch (error) {
+
+        return res.status(400).json({
+            "errorMessage": error,
+            "statusCode": 400
+        });
+    }
+
+}
+
+
+async function searchPostsByProductName(req, res) {
+    try {
+        // this is a list of categories
+        let givenProductName = req.body.productName;
+        // if productName is undefined
+        if (!givenProductName) {
+            return res.status(400).json({ errorMessage: "No productName Was Given" });
+        }
+
+        //FINDING POSTS BY THE GIVEN CATEGORIES
+        let retrievedPosts = await postsCollection.find({ productName: { $regex: '.*' + givenProductName + '.*' } });
+
+
+        if (retrievedPosts.length == 0) {
+            return res.status(400).json({
+                "errorMessage": "No Posts Were Found",
+                "statusCode": 400
+            });
+        }
+
+        res.status(200).json({
+            "successMessage": "Posts Retrieved successfully",
+            "posts": retrievedPosts,
+            "statusCode": 200
+        });
+
+    }
+    catch (error) {
+
+        return res.status(400).json({
+            "errorMessage": error,
+            "statusCode": 400
+        });
+    }
+
+}
+
+
 
 
 async function incrementFakeVotes(req, res) {
@@ -95,7 +176,6 @@ async function incrementFakeVotes(req, res) {
 
 async function incrementOriginalVotes(req, res) {
     try {
-        console.log("in here");
         const postID = req.body.postID;
 
         //INCREMENT VOTES BY ONE
@@ -141,6 +221,10 @@ async function incrementOriginalVotes(req, res) {
 }
 
 module.exports = {
-    uploadPostFunc: uploadPost, incrementFakeVotesFunc: incrementFakeVotes,
+    uploadPostFunc: uploadPost,
+    incrementFakeVotesFunc: incrementFakeVotes,
     incrementOriginalVotesFunc: incrementOriginalVotes,
+    findPostsByCategoriesFunc: findPostsByCategories,
+    searchPostsByProductNameFunc: searchPostsByProductName
+
 };
