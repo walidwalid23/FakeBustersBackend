@@ -17,7 +17,7 @@ const usersSchema = mongoose.Schema({
         required: true
     },
 
-    votedPosts: [String],
+    votedPosts: [{ type: String, unique: true }],
 
 
 });

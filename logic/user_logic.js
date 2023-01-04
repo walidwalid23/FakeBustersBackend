@@ -132,6 +132,7 @@ async function verifyUserToken(req, res) {
         // if it didn't throw error it means token is valid
         res.status(200).json({
             "successMessage": "Token is successfully verified",
+            "userID": extractedUserData.userID,
             "statusCode": 200
         })
 
