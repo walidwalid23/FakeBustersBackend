@@ -41,7 +41,10 @@ async function signUp(req, res) {
 
         //CREATE AND ASSIGN A TOKEN FOR THE USER
         const tokenPass = process.env.token_pass;
-        const token = jwt.sign({ username: req.body.username, userID: insertedObject._id },
+        const token = jwt.sign({
+            username: req.body.username, userID: insertedObject._id,
+            profileImage: imagePath
+        },
             tokenPass, { expiresIn: "48h" });
         //TOKEN IS SENT IN THE HEADER OF THE RESPONSE
         res.header("user-token", token);
@@ -94,7 +97,7 @@ async function login(req, res) {
         //AT THIS POINT SINCE NO ERROR RETURNED EVERYTHING SHOULD BE CORRECT
         //CREATE AND ASSIGN A TOKEN FOR THE USER
         const tokenPass = process.env.token_pass;
-        const token = jwt.sign({ username: req.body.username, userID: userObj._id },
+        const token = jwt.sign({ username: req.body.username, userID: userObj._id, profileImage: userObj.profileImage },
             tokenPass, { expiresIn: "48h" });
         //TOKEN IS SENT IN THE HEADER OF THE RESPONSE
         res.header("user-token", token);

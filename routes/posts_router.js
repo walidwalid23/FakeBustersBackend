@@ -12,7 +12,7 @@ const { searchPostsByProductNameFunc } = require('../logic/posts_logic');
 postsRouter.post('/uploadPost', verifyUserTokenMiddleware, upload.single('postImage'), uploadPostFunc);
 postsRouter.post('/incrementFakeVotes', verifyUserTokenMiddleware, incrementFakeVotesFunc);
 postsRouter.post('/incrementOriginalVotes', verifyUserTokenMiddleware, incrementOriginalVotesFunc);
-postsRouter.post('/getPostsByCategories', verifyUserTokenMiddleware, findPostsByCategoriesFunc);
+postsRouter.post('/findPostsByCategories', verifyUserTokenMiddleware, findPostsByCategoriesFunc);
 postsRouter.post('/searchPostsByProductName', verifyUserTokenMiddleware, searchPostsByProductNameFunc);
 
 module.exports = postsRouter;
