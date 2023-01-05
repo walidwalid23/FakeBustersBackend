@@ -60,7 +60,7 @@ async function findPostsByCategories(req, res) {
         for (let i = 0; i < categories.length; i++) {
 
             var eachCategoryPosts = await postsCollection.find({ category: categories[i] });
-            var eachCategoryPostsObject = [];
+            var objectPosts = [];
             //iterate over each post
             for (let j = 0; j < eachCategoryPosts.length; j++) {
                 //NOTE: Mongoose document which doesn't allow adding properties so convert the returned document to a plain object 
@@ -71,10 +71,11 @@ async function findPostsByCategories(req, res) {
                 postObject.uploaderUsername = postUploader.username;
                 postObject.uploaderImage = postUploader.profileImage;
 
-                eachCategoryPostsObject.push(postObject);
+                objectPosts.push(postObject);
             }
+            //   console.log(eachCategoryPosts);
 
-            retrievedPosts = retrievedPosts.concat(eachCategoryPostsObject);
+            retrievedPosts = retrievedPosts.concat(objectPosts);
 
 
         }
@@ -200,37 +201,41 @@ async function incrementFakeVotes(req, res) {
 
 async function incrementOriginalVotes(req, res) {
     try {
+
         const postID = req.body.postID;
 
         //INCREMENT VOTES BY ONE
-        postsCollection.findByIdAndUpdate({ _id: postID }, { $inc: { 'originalVotes': 1 } }, { new: true }, function (err, response) {
-            if (err) {
-                return res.status(400).json({
-                    "errorMessage": err,
-                    "statusCode": 400
-                });
-            } else {
-                // INCREMENTION SUCCEEDED
-                // ADD THE POST ID TO THE VOTER VOTED POSTS TO PREVENT HIM FROM VOTING AGAIN
-                console.log(req.extractedUserData.userID);
-                usersCollection.updateOne({ _id: req.extractedUserData.userID },
-                    { $push: { votedPosts: postID } }, function (err, docs) {
-                        if (err) {
-                            return res.status(400).json({
-                                "errorMessage": err,
-                                "statusCode": 400
-                            });
-                        }
-                        else {
-                            console.log(docs);
-                            return res.status(200).json({
-                                "successMessage": "Voted Successfully",
-                                "statusCode": 200
-                            });
-                        }
+        postsCollection.findByIdAndUpdate({ _id: postID }, { $inc: { 'originalVotes': 1 } },
+            { new: true }, function (err, updatedPost) {
+                if (err) {
+                    return res.status(400).json({
+                        "errorMessage": err,
+                        "statusCode": 400
                     });
+                } else {
+                    // INCREMENTION SUCCEEDED
+                    // ADD THE POST ID TO THE VOTER VOTED POSTS
+                    console.log(req.extractedUserData.userID);
+                    usersCollection.updateOne({ _id: req.extractedUserData.userID },
+                        { $push: { votedPosts: postID } }, { new: true }, function (err, updatedCollection) {
+                            if (err) {
+                                return res.status(400).json({
+                                    "errorMessage": err,
+                                    "statusCode": 400
+                                });
+                            }
+                            else {
+                                console.log(updatedPost);
+                                return res.status(200).json({
+                                    "successMessage": "Voted Successfully",
+                                    "fakeVotes": updatedPost.fakeVotes,
+                                    "originalVotes": updatedPost.originalVotes,
+                                    "statusCode": 200
+                                });
+                            }
+                        });
+                }
             }
-        }
         );
     }
 
@@ -244,11 +249,38 @@ async function incrementOriginalVotes(req, res) {
 
 }
 
+async function getVotes(req, res) {
+    try {
+
+        const postID = req.query.postID;
+        //INCREMENT VOTES BY ONE
+        const post = await postsCollection.findById(postID);
+        console.log(postID);
+        console.log(post);
+        return res.status(200).json({
+            "successMessage": "Votes Retrived Successfully",
+            "fakeVotes": post.fakeVotes,
+            "originalVotes": post.originalVotes,
+        });
+    }
+
+    catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            "errorMessage": error,
+            "statusCode": 400
+        });
+    }
+
+}
+
+
 module.exports = {
     uploadPostFunc: uploadPost,
     incrementFakeVotesFunc: incrementFakeVotes,
     incrementOriginalVotesFunc: incrementOriginalVotes,
     findPostsByCategoriesFunc: findPostsByCategories,
-    searchPostsByProductNameFunc: searchPostsByProductName
+    searchPostsByProductNameFunc: searchPostsByProductName,
+    getVotesFunc: getVotes
 
 };
