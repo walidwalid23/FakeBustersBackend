@@ -28,7 +28,7 @@ appServer.use(cors());
 appServer.use('/profile_images', express.static('profile_images'));
 appServer.use('/posts_images', express.static('posts_images'));
 
-appServer.use("/", (req, res) => res.send("welcome to fake busters"));
+
 //MAIN ROUTES
 appServer.use('/users', userRouter);
 appServer.use('/posts', postsRouter);
