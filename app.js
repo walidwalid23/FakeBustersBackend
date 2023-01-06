@@ -8,7 +8,7 @@ const postsRouter = require('./routes/posts_router');
 
 //RUN THE SERVER
 const PORT = process.env.PORT || 3000;
-appServer.listen(3000, (PORT) => {
+appServer.listen(PORT, () => {
     console.log("Sever Is Listening");
 });
 //CONNECT TO THE DATABASE
