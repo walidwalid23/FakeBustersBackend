@@ -31,6 +31,7 @@ async function uploadPost(req, res) {
             "successMessage": "Post Uploaded successfully",
             "uploaderUsername": req.extractedUserData.username,
             "uploaderImage": req.extractedUserData.profileImage,
+            "postID": insertedObject._id,
             "statusCode": 200
         });
 
@@ -281,12 +282,12 @@ async function getVotes(req, res) {
         //INCREMENT VOTES BY ONE
         const post = await postsCollection.findById(postID);
         console.log(postID);
-        console.log(post);
         return res.status(200).json({
             "successMessage": "Votes Retrived Successfully",
             "fakeVotes": post.fakeVotes,
             "originalVotes": post.originalVotes,
         });
+
     }
 
     catch (error) {
