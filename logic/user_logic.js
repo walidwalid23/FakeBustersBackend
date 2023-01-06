@@ -55,7 +55,7 @@ async function signUp(req, res) {
 
     }
     catch (error) {
-
+        console.log(error);
         return res.status(400).json({
             "errorMessage": error,
             "statusCode": 400
