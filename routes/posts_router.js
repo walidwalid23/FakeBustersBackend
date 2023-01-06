@@ -14,8 +14,9 @@ postsRouter.post('/uploadPost', verifyUserTokenMiddleware, upload.single('postIm
 postsRouter.post('/incrementFakeVotes', verifyUserTokenMiddleware, incrementFakeVotesFunc);
 postsRouter.post('/incrementOriginalVotes', verifyUserTokenMiddleware, incrementOriginalVotesFunc);
 postsRouter.post('/findPostsByCategories', verifyUserTokenMiddleware, findPostsByCategoriesFunc);
-postsRouter.post('/searchPostsByProductName', verifyUserTokenMiddleware, searchPostsByProductNameFunc);
+
 //GET REQUESTS
+postsRouter.get('/searchPostsByProductName', verifyUserTokenMiddleware, searchPostsByProductNameFunc);
 postsRouter.get('/getVotes', verifyUserTokenMiddleware, getVotesFunc);
 
 module.exports = postsRouter;

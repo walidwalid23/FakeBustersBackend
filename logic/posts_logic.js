@@ -8,7 +8,7 @@ async function uploadPost(req, res) {
     try {
         //VALIDATING THE DATA GIVEN IN BODY BEFORE CREATING A USER
         const postsValidationDetails = postsValidation(req.body);
-        console.log(req.body.productName);
+
 
         if (postsValidationDetails.error != null) {
             return res.status(400).json({ errorMessage: postsValidationDetails.error.details[0].message });
@@ -63,13 +63,39 @@ async function findPostsByCategories(req, res) {
             var objectPosts = [];
             //iterate over each post
             for (let j = 0; j < eachCategoryPosts.length; j++) {
-                //NOTE: Mongoose document which doesn't allow adding properties so convert the returned document to a plain object 
+                //NOTE: Mongoose document doesn't allow adding properties so convert the returned document to a plain object 
                 let postUploader = await usersCollection.findById(eachCategoryPosts[j].uploaderID);
                 var postObject = eachCategoryPosts[j].toObject();
+
 
                 // add the user attributes to each post object
                 postObject.uploaderUsername = postUploader.username;
                 postObject.uploaderImage = postUploader.profileImage;
+                // CHECK IF THE CURRENT USER ALREADY VOTES OR NOT
+                let currentUser = await usersCollection.findById(req.extractedUserData.userID);
+                let currentUserVotedPostsIDs = currentUser.votedPosts;
+
+                const foundVoted = currentUserVotedPostsIDs.find(function (votedPostID) {
+
+                    return votedPostID == postObject._id;
+                });
+
+                if (foundVoted) {
+                    postObject.hasCurrentUserVoted = true;
+                }
+
+                else {
+                    postObject.hasCurrentUserVoted = false;
+                }
+                // CHECK IF THE CURRENT USER IS THE ONE WHO UPLOADED THE POST OR NOT
+                let currentUserID = req.extractedUserData.userID;
+                let postUploaderID = eachCategoryPosts[j].uploaderID;
+                if (currentUserID == postUploaderID) {
+                    postObject.isCurrentUserUploader = true;
+                }
+                else {
+                    postObject.isCurrentUserUploader = false;
+                }
 
                 objectPosts.push(postObject);
             }
@@ -80,7 +106,6 @@ async function findPostsByCategories(req, res) {
 
         }
 
-        console.log(retrievedPosts);
 
         if (retrievedPosts.length == 0) {
             return res.status(400).json({
@@ -88,7 +113,7 @@ async function findPostsByCategories(req, res) {
                 "statusCode": 400
             });
         }
-        console.log("go you buddy");
+
         res.status(200).json({
             "successMessage": "Posts Retrieved successfully",
             "posts": retrievedPosts,
@@ -111,7 +136,7 @@ async function findPostsByCategories(req, res) {
 async function searchPostsByProductName(req, res) {
     try {
         // this is a list of categories
-        let givenProductName = req.body.productName;
+        let givenProductName = req.query.productName;
         // if productName is undefined
         if (!givenProductName) {
             return res.status(400).json({ errorMessage: "No productName Was Given" });
