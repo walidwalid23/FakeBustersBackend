@@ -7,7 +7,8 @@ const userRouter = require('./routes/user_router');
 const postsRouter = require('./routes/posts_router');
 
 //RUN THE SERVER
-appServer.listen(5000, () => {
+const PORT = process.env.PORT || 3000;
+appServer.listen(3000, (PORT) => {
     console.log("Sever Is Listening");
 });
 //CONNECT TO THE DATABASE
