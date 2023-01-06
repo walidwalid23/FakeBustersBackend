@@ -7,14 +7,14 @@ const userRouter = require('./routes/user_router');
 const postsRouter = require('./routes/posts_router');
 
 //RUN THE SERVER
-appServer.listen(3000, () => {
+appServer.listen(5000, () => {
     console.log("Sever Is Listening");
 });
 //CONNECT TO THE DATABASE
 mongoose.connect(process.env.db_connection, (error) => {
     if (error) { console.log("ERROR CONNECTING TO MONGOOSE:" + error); }
     else {
-        console.log("Connected to local MONGO DB");
+        console.log("Connected to MONGO DB");
     }
 });
 
