@@ -7,7 +7,7 @@ const userRouter = require('./routes/user_router');
 const postsRouter = require('./routes/posts_router');
 
 //RUN THE SERVER
-appServer.listen(80, () => {
+appServer.listen(3000, () => {
     console.log("Sever Is Listening");
 });
 //CONNECT TO THE DATABASE
