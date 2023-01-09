@@ -2,8 +2,7 @@ const postsCollection = require('../models/post_model');
 const usersCollection = require('../models/user_model');
 const notificationsCollection = require('../models/notification_model');
 const postsValidation = require('./posts_validation_logic');
-var mongoose = require('mongoose');
-const { response } = require('express');
+
 
 async function uploadPost(req, res) {
     try {
@@ -244,10 +243,13 @@ async function incrementFakeVotes(req, res) {
                                 //SUCCESS
                                 // NOTIFY THE POST OWNER
                                 const notifierUsername = req.extractedUserData.username;
+                                const notifierID = req.extractedUserData.userID;
+
                                 const insertedNotification = await notificationsCollection({
                                     notificationText: notifierUsername + " Has Voted Fake On Your Post",
                                     receiverID: updatedPost.uploaderID,
                                     postID: postID,
+                                    notifierID: notifierID
 
                                 }).save();
 

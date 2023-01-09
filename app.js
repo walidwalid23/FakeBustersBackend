@@ -5,8 +5,10 @@ const cors = require('cors');
 require("dotenv/config");
 const userRouter = require('./routes/user_router');
 const postsRouter = require('./routes/posts_router');
+const notificationsRouter = require('./routes/notifications_router');
 
 //RUN THE SERVER
+//the env.port will be given by the host (or not)
 const PORT = process.env.PORT || 3000;
 appServer.listen(PORT, () => {
     console.log("Sever Is Listening");
@@ -32,4 +34,5 @@ appServer.use('/posts_images', express.static('posts_images'));
 //MAIN ROUTES
 appServer.use('/users', userRouter);
 appServer.use('/posts', postsRouter);
+appServer.use('/notifications', notificationsRouter);
 

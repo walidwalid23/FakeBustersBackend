@@ -11,6 +11,11 @@ const notificationsSchema = mongoose.Schema({
         default: Date.now()
     },
 
+    notifierID: {
+        type: String,
+        required: true,
+    },
+
     receiverID: {
         type: String,
         required: true,
@@ -20,6 +25,8 @@ const notificationsSchema = mongoose.Schema({
         type: String,
         required: true,
     },
+
+
 
 });
 
