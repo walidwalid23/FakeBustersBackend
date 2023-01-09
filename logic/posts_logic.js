@@ -72,7 +72,7 @@ async function findPostsByCategories(req, res) {
                 // add the user attributes to each post object
                 postObject.uploaderUsername = postUploader.username;
                 postObject.uploaderImage = postUploader.profileImage;
-                // CHECK IF THE CURRENT USER ALREADY VOTES OR NOT
+                // CHECK IF THE CURRENT USER ALREADY VOTED OR NOT
                 let currentUser = await usersCollection.findById(req.extractedUserData.userID);
                 let currentUserVotedPostsIDs = currentUser.votedPosts;
 
@@ -145,6 +145,46 @@ async function searchPostsByProductName(req, res) {
 
         //FINDING POSTS BY THE GIVEN CATEGORIES
         let retrievedPosts = await postsCollection.find({ productName: { $regex: '.*' + givenProductName + '.*' } });
+        // PUT THE POSTS IN ANOTHER LIST WITH THE EXTRA ATTRIBUTES FOR EACH POST OBJECT
+        var objectPosts = [];
+        //iterate over each post
+        for (let j = 0; j < retrievedPosts.length; j++) {
+            //NOTE: Mongoose document doesn't allow adding properties so convert the returned document to a plain object 
+            let postUploader = await usersCollection.findById(retrievedPosts[j].uploaderID);
+            var postObject = retrievedPosts[j].toObject();
+
+
+            // add the user attributes to each post object
+            postObject.uploaderUsername = postUploader.username;
+            postObject.uploaderImage = postUploader.profileImage;
+            // CHECK IF THE CURRENT USER ALREADY VOTED OR NOT
+            let currentUser = await usersCollection.findById(req.extractedUserData.userID);
+            let currentUserVotedPostsIDs = currentUser.votedPosts;
+
+            const foundVoted = currentUserVotedPostsIDs.find(function (votedPostID) {
+
+                return votedPostID == postObject._id;
+            });
+
+            if (foundVoted) {
+                postObject.hasCurrentUserVoted = true;
+            }
+
+            else {
+                postObject.hasCurrentUserVoted = false;
+            }
+            // CHECK IF THE CURRENT USER IS THE ONE WHO UPLOADED THE POST OR NOT
+            let currentUserID = req.extractedUserData.userID;
+            let postUploaderID = retrievedPosts[j].uploaderID;
+            if (currentUserID == postUploaderID) {
+                postObject.isCurrentUserUploader = true;
+            }
+            else {
+                postObject.isCurrentUserUploader = false;
+            }
+
+            objectPosts.push(postObject);
+        }
 
 
         if (retrievedPosts.length == 0) {
@@ -156,7 +196,7 @@ async function searchPostsByProductName(req, res) {
 
         res.status(200).json({
             "successMessage": "Posts Retrieved successfully",
-            "posts": retrievedPosts,
+            "posts": objectPosts,
             "statusCode": 200
         });
 

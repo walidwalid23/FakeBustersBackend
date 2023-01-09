@@ -24,7 +24,7 @@ function verifyUserTokenMiddleware(req, res, next) {
     catch (err) {
         console.log(err);
         res.status(401).json({
-            "errorMessage": "Invalid Token",
+            "errorMessage": "Invalid Token Please Login Again",
             "statusCode": 401
         });
     }
