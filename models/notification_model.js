@@ -1,17 +1,17 @@
 const mongoose = require("mongoose");
 
-const commentsSchema = mongoose.Schema({
-    commentText: {
+const notificationsSchema = mongoose.Schema({
+    notificationText: {
         type: String,
         required: true,
     },
 
-    commentDate: {
+    notificationDate: {
         type: Date,
         default: Date.now()
     },
 
-    commenterID: {
+    receiverID: {
         type: String,
         required: true,
     },
@@ -21,15 +21,8 @@ const commentsSchema = mongoose.Schema({
         required: true,
     },
 
-    usefulness: {
-        type: Number,
-        required: true,
-        default: 0
-    },
-
-
 });
 
 
 
-module.exports = mongoose.model("CommentsCollection", commentsSchema);
+module.exports = mongoose.model("notificationsCollection", notificationsSchema);

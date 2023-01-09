@@ -1,5 +1,6 @@
 const postsCollection = require('../models/post_model');
 const usersCollection = require('../models/user_model');
+const notificationsCollection = require('../models/notification_model');
 const postsValidation = require('./posts_validation_logic');
 var mongoose = require('mongoose');
 const { response } = require('express');
@@ -232,7 +233,7 @@ async function incrementFakeVotes(req, res) {
                     // ADD THE POST ID TO THE VOTER VOTED POSTS
                     console.log(req.extractedUserData.userID);
                     usersCollection.updateOne({ _id: req.extractedUserData.userID },
-                        { $push: { votedPosts: postID } }, { new: true }, function (err, updatedCollection) {
+                        { $push: { votedPosts: postID } }, { new: true }, async function (err, updatedCollection) {
                             if (err) {
                                 return res.status(400).json({
                                     "errorMessage": err,
@@ -240,6 +241,16 @@ async function incrementFakeVotes(req, res) {
                                 });
                             }
                             else {
+                                //SUCCESS
+                                // NOTIFY THE POST OWNER
+                                const notifierUsername = req.extractedUserData.username;
+                                const insertedNotification = await notificationsCollection({
+                                    notificationText: notifierUsername + " Has Voted Fake On Your Post",
+                                    receiverID: updatedPost.uploaderID,
+                                    postID: postID,
+
+                                }).save();
+
                                 console.log(updatedPost);
                                 return res.status(200).json({
                                     "successMessage": "Voted Successfully",
@@ -283,7 +294,7 @@ async function incrementOriginalVotes(req, res) {
                     // ADD THE POST ID TO THE VOTER VOTED POSTS
                     console.log(req.extractedUserData.userID);
                     usersCollection.updateOne({ _id: req.extractedUserData.userID },
-                        { $push: { votedPosts: postID } }, { new: true }, function (err, updatedCollection) {
+                        { $push: { votedPosts: postID } }, { new: true }, async function (err, updatedCollection) {
                             if (err) {
                                 return res.status(400).json({
                                     "errorMessage": err,
@@ -291,6 +302,16 @@ async function incrementOriginalVotes(req, res) {
                                 });
                             }
                             else {
+                                //SUCCESS
+                                // NOTIFY THE POST OWNER
+                                const notifierUsername = req.extractedUserData.username;
+                                const insertedNotification = await notificationsCollection({
+                                    notificationText: notifierUsername + " Has Voted Original On Your Post",
+                                    receiverID: updatedPost.uploaderID,
+                                    postID: postID,
+
+                                }).save();
+
                                 console.log(updatedPost);
                                 return res.status(200).json({
                                     "successMessage": "Voted Successfully",
