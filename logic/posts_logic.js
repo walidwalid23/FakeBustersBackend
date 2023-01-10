@@ -365,10 +365,13 @@ async function incrementOriginalVotes(req, res) {
                                 //SUCCESS
                                 // NOTIFY THE POST OWNER
                                 const notifierUsername = req.extractedUserData.username;
+                                const notifierID = req.extractedUserData.userID;
+
                                 const insertedNotification = await notificationsCollection({
                                     notificationText: notifierUsername + " Has Voted Original On Your Post",
                                     receiverID: updatedPost.uploaderID,
                                     postID: postID,
+                                    notifierID: notifierID
 
                                 }).save();
 
