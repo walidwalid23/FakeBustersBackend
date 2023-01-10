@@ -213,6 +213,64 @@ async function searchPostsByProductName(req, res) {
 
 
 
+async function searchPostsByID(req, res) {
+    try {
+        // this is a list of categories
+        let postID = req.query.postID;
+        // if productName is undefined
+        if (!postID) {
+            return res.status(400).json({ errorMessage: "No postID Was Given" });
+        }
+
+        //FINDING POSTS BY THE GIVEN CATEGORIES
+        let retrievedPost = await postsCollection.findById(postID);
+
+
+        //NOTE: Mongoose document doesn't allow adding properties so convert the returned document to a plain object 
+        let postUploader = await usersCollection.findById(retrievedPost.uploaderID);
+        var postObject = retrievedPost.toObject();
+
+        // add the user attributes to each post object
+        postObject.uploaderUsername = postUploader.username;
+        postObject.uploaderImage = postUploader.profileImage;
+        // CHECK IF THE CURRENT USER ALREADY VOTED OR NOT
+        let currentUser = await usersCollection.findById(req.extractedUserData.userID);
+        let currentUserVotedPostsIDs = currentUser.votedPosts;
+
+        const foundVoted = currentUserVotedPostsIDs.find(function (votedPostID) {
+
+            return votedPostID == postObject._id;
+        });
+
+        if (foundVoted) {
+            postObject.hasCurrentUserVoted = true;
+        }
+        else {
+            postObject.hasCurrentUserVoted = false;
+        }
+
+        // THE CURRENT USER IS THE ONE WHO UPLOADED THE POST 
+        postObject.isCurrentUserUploader = true;
+
+
+        res.status(200).json({
+            "successMessage": "Post Retrieved successfully",
+            "posts": postObject,
+            "statusCode": 200
+        });
+
+    }
+    catch (error) {
+
+        return res.status(400).json({
+            "errorMessage": error,
+            "statusCode": 400
+        });
+    }
+
+}
+
+
 
 async function incrementFakeVotes(req, res) {
     try {
@@ -370,6 +428,7 @@ module.exports = {
     incrementOriginalVotesFunc: incrementOriginalVotes,
     findPostsByCategoriesFunc: findPostsByCategories,
     searchPostsByProductNameFunc: searchPostsByProductName,
-    getVotesFunc: getVotes
+    getVotesFunc: getVotes,
+    searchPostsByIDFunc: searchPostsByID
 
 };
