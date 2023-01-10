@@ -255,7 +255,7 @@ async function searchPostsByID(req, res) {
 
         res.status(200).json({
             "successMessage": "Post Retrieved successfully",
-            "posts": postObject,
+            "post": postObject,
             "statusCode": 200
         });
 
