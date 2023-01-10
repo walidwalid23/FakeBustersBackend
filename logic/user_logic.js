@@ -197,6 +197,13 @@ async function updateUser(req, res) {
 
         }
 
+        else {
+            return res.status(400).json({
+                "errorMessage": "No Values Were Provided",
+                "statusCode": 400
+            });
+        }
+
     }
     catch (error) {
         console.log(error);
