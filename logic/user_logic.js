@@ -119,6 +119,95 @@ async function login(req, res) {
 
 }
 
+
+async function updateUser(req, res) {
+    try {
+
+        //VALIDATING THE DATA GIVEN IN BODY BEFORE CREATING A USER
+        /*
+        const registervalidationDetails = userSignupValidation(req.body);
+        console.log(registervalidationDetails);
+        if (registervalidationDetails.error != null) {
+            return res.status(400).json({ errorMessage: registervalidationDetails.error.details[0].message });
+        }
+        */
+
+        console.log(req.body);
+        //IF USERNAME IS PROVIDED ALONE
+        if (req.body.username && !req.body.password) {
+            //CHECKING IF THE USERNAME IS REPEATED 
+            const usernameRepeated = await usersCollection.findOne({ username: req.body.username });
+            if (usernameRepeated) {
+                return res.status(400).json({
+                    "errorMessage": "Username Already Exists",
+                    "statusCode": 400
+                });
+            }
+            else {
+                const updatedUser = await usersCollection.findOneAndUpdate({ _id: req.extractedUserData.userID }
+                    , { username: req.body.username }, { new: true });
+
+                return res.status(200).json({
+                    "successMessage": "Username Updated Successfully",
+                    "statusCode": 200
+                });
+
+            }
+        }
+
+        else if (req.body.password && !req.body.username) {
+            //HASHING THE PASSWORD
+            const password = req.body.password;
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+
+            //UPDATE USER PASSWORD
+            const updatedUser = await usersCollection.findOneAndUpdate({ _id: req.extractedUserData.userID }
+                , { password: hashedPassword }, { new: true });
+
+            return res.status(200).json({
+                "successMessage": "Password Updated Successfully",
+                "statusCode": 200
+            });
+        }
+
+        else if (req.body.password && req.body.username) {
+            //CHECKING IF THE USERNAME IS REPEATED 
+            const usernameRepeated = await usersCollection.findOne({ username: req.body.username });
+            if (usernameRepeated) {
+                return res.status(400).json({
+                    "errorMessage": "Username Already Exists",
+                    "statusCode": 400
+                });
+            }
+
+            //HASHING THE PASSWORD
+            const password = req.body.password;
+            const salt = await bcrypt.genSalt(10);
+            const hashedPassword = await bcrypt.hash(password, salt);
+
+            //UPDATE USER USERNAME AND PASSWORD
+            const updatedUser = await usersCollection.findOneAndUpdate({ _id: req.extractedUserData.userID }
+                , { username: req.body.username, password: hashedPassword }, { new: true });
+
+            return res.status(200).json({
+                "successMessage": "Username And Password Updated Successfully",
+                "statusCode": 200
+            });
+
+        }
+
+    }
+    catch (error) {
+        console.log(error);
+        return res.status(400).json({
+            "errorMessage": error,
+            "statusCode": 400
+        });
+    }
+
+}
+
 async function verifyUserToken(req, res) {
     const token = req.header('user-token');
 
@@ -152,5 +241,6 @@ async function verifyUserToken(req, res) {
 module.exports = {
     signUpFunction: signUp,
     loginFunction: login,
-    verifyUserTokenFunction: verifyUserToken
+    verifyUserTokenFunction: verifyUserToken,
+    updateUserFunction: updateUser
 };
