@@ -222,12 +222,20 @@ async function searchPostsByID(req, res) {
         let postID = req.query.postID;
         // if productName is undefined
         if (!postID) {
-            return res.status(400).json({ errorMessage: "No postID Was Given" });
+            return res.status(400).json({
+                errorMessage: "No postID Was Given",
+                statusCode: 400
+            });
         }
 
         //FINDING POSTS BY THE GIVEN CATEGORIES
         let retrievedPost = await postsCollection.findById(postID);
-
+        if (!retrievedPost) {
+            return res.status(400).json({
+                errorMessage: "Post Not Found",
+                statusCode: 400
+            });
+        }
 
         //NOTE: Mongoose document doesn't allow adding properties so convert the returned document to a plain object 
         let postUploader = await usersCollection.findById(retrievedPost.uploaderID);
