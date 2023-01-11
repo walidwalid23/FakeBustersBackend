@@ -140,7 +140,10 @@ async function searchPostsByProductName(req, res) {
         let givenProductName = req.query.productName;
         // if productName is undefined
         if (!givenProductName) {
-            return res.status(400).json({ errorMessage: "No productName Was Given" });
+            return res.status(400).json({
+                "errorMessage": "No productName Was Given",
+                "statusCode": 400
+            });
         }
 
         //FINDING POSTS BY THE GIVEN CATEGORIES
