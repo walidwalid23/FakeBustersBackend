@@ -274,6 +274,34 @@ async function searchPostsByID(req, res) {
 }
 
 
+async function deletePostByID(req, res) {
+    try {
+        // this is a list of categories
+        let postID = req.body.postID;
+        // if productName is undefined
+        if (!postID) {
+            return res.status(400).json({ errorMessage: "No postID Was Given" });
+        }
+
+        //DELETE POST BY ID
+        await postsCollection.deleteOne({ _id: postID });
+
+        res.status(200).json({
+            "successMessage": "Post Deleted successfully",
+            "statusCode": 200
+        });
+
+    }
+    catch (error) {
+
+        return res.status(400).json({
+            "errorMessage": error,
+            "statusCode": 400
+        });
+    }
+
+}
+
 
 async function incrementFakeVotes(req, res) {
     try {
@@ -435,6 +463,7 @@ module.exports = {
     findPostsByCategoriesFunc: findPostsByCategories,
     searchPostsByProductNameFunc: searchPostsByProductName,
     getVotesFunc: getVotes,
-    searchPostsByIDFunc: searchPostsByID
+    searchPostsByIDFunc: searchPostsByID,
+    deletePostByIDFunc: deletePostByID
 
 };
