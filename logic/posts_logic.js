@@ -235,6 +235,8 @@ async function searchPostsByID(req, res) {
                 errorMessage: "Post Not Found",
                 statusCode: 400
             });
+
+
         }
 
         //NOTE: Mongoose document doesn't allow adding properties so convert the returned document to a plain object 

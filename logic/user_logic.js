@@ -226,7 +226,12 @@ async function verifyUserToken(req, res) {
     }
     try {
         //Verify the token and extract the user data
-        const extractedUserData = jwt.verify(token, process.env.token_pass);
+        let extractedUserData = jwt.verify(token, process.env.token_pass);
+        // find user votes count 
+        let user = usersCollection.findById(extractedUserData.userID);
+        // add userVotes attribute to the extractedUserData Object
+        extractedUserData.userVotes = user.votedPosts.length;
+
         console.log("the extracted data:", extractedUserData);
         // if it didn't throw error it means token is valid
         res.status(200).json({
