@@ -217,7 +217,6 @@ async function updateUser(req, res) {
 
 async function verifyUserToken(req, res) {
     const token = req.header('user-token');
-    console.log(token);
     if (token == null) {
         return res.status(401).json({
             "errorMessage": "Access Denied",
@@ -228,7 +227,7 @@ async function verifyUserToken(req, res) {
         //Verify the token and extract the user data
         let extractedUserData = jwt.verify(token, process.env.token_pass);
         // find user votes count 
-        let user = usersCollection.findById(extractedUserData.userID);
+        let user = await usersCollection.findById(extractedUserData.userID);
         // add userVotes attribute to the extractedUserData Object
         extractedUserData.userVotes = user.votedPosts.length;
 
