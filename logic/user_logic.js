@@ -217,7 +217,7 @@ async function updateUser(req, res) {
 
 async function verifyUserToken(req, res) {
     const token = req.header('user-token');
-
+    console.log(token);
     if (token == null) {
         return res.status(401).json({
             "errorMessage": "Access Denied",
@@ -243,6 +243,7 @@ async function verifyUserToken(req, res) {
 
     }
     catch (err) {
+        console.log(err);
         res.status(401).json({
             "errorMessage": "Invalid Token",
             "statusCode": 401
