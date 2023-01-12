@@ -8,7 +8,7 @@ const notificationsSchema = mongoose.Schema({
 
     notificationDate: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
 
     notifierID: {

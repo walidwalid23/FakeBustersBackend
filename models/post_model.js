@@ -19,7 +19,7 @@ const postsSchema = mongoose.Schema({
     },
     postDate: {
         type: Date,
-        default: Date.now()
+        default: Date.now
     },
     fakeVotes: {
         type: Number,
