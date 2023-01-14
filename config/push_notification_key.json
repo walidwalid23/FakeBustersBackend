@@ -1,0 +1,12 @@
+{
+  "type": "service_account",
+  "project_id": "fakebusters-1a46c",
+  "private_key_id": "1256784095f59660f3aa51bb9f70075402061985",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQCx8L02f/GzG2/6\noKOFjy+1KhO3sM0L2ABPE1nUQlj8xqTXEESfqXuZZ6E64VEJUbRSgirY7Em7gnx0\n9RXBPrcrN1XYNDiNWigjFAoc+FAwW1ni/ABsZd1INj0M42Q/3G6MkCpgRi5UFmkK\nu+ye6W+od2VOJtkhZjNugV74mqDQBNTun0Z5XWiESwxRiN5uyAx3h3zHdVuHB9yw\nMRHNTiLXIrGrGpBfb377ga89+5i2W7Clm0CTl1D00C4x0/P8xHtXe27JhnZnXCqS\n/iJqFhuN0xyvylgGaDNpFyk4sdyFHTHzqIwc3sVzR3Cgt5Qm+LtGaajJlBCRLHrh\n2thIHGY5AgMBAAECggEABoWzW81sBw4wXYnjQIn6HCb+ZByVttN3AcRXmzSyNWlp\nwU0neh47XskU2KHfEhXrI7NBfeQdrkMMdo7aulOnDA1E0bj/9yoY3/NJYnHgIkD2\nSMrcUEeEvp49VeJPtQRf5CSvJvT/mFBeJI508DIQiDwVy/vszXZ6bWMjf5OPEDIu\nJuKwnOFOW7rv/pCDdpbluaSMDWyq3yycEV2kqdX5tSGOviqHF1DwG7ee+aADVntM\noZigx8rZJtZycZuzrnOLhPwuTucCgRWNWAHfhKmRdURPxTWJUNa3+sn1nkhUsgU/\n+M4TmmxL6IWl1d+MHKCBHrUhQRf3Uwzvcqf+ziMo0QKBgQDd2bvYFwIJLQou0lti\nVfweh+vBAKnm1zr+jpNLsguq42Q0iBnZRDuyXY2nLqrz2cU1g4pgElueQ4WJSc8z\nohrkHNe0Eyua9Wg6J3xA2DfQwPxip8e9PBstWH7GSDd77ldE76hjJgg8Uu5iM8aO\nBDpf6m6g2F0C7UKtDV2u3T2KsQKBgQDNVK19aWvaEYfKEev7aKLCq1Xf7tdTC7Dn\nNcQwUC7MLuoqD3er9JTZ8984oiHeZ6QLCvvkQ/FJurL1Sedw15J/4gUNjly7a42B\n+118OCH+rKluWh/GcF79sIMr5KHT6p4NXwFLD8/6OnJfaTg7LMwoZ+Kc9YVau2W2\nYAvrQrBmCQKBgQDBtAjlhkFKzb6kXxtXYwg9iCP6Yp/2ZFqoRMirQQwa62xkyaj4\nITGWbUTvgjnVrIEaVn4NoDnKl94SnxWBWbrtDZnxKwPZywh0LmG5JJCnfrlfUmt9\n+Ospzqjya7+2P8aG9FIsL9rlAOwPZnGpMlvdv41Ud1XO5mZfPtpbgeToIQKBgHBe\nuRt7SDTthxzFNho+p2RWFAcbVOfz6/p86ENwfkvsGOav1FRc4+Frn2wE/vgSTCpm\n9ndz32b0L+Ahc/HDaD9oWE+U65b+Q1ExWXYT2jbgE1F7LQySjsnTgdXRp+ar7Zdv\nuOt1WeKdfd5NXSK1X311bQVtMG/5Qq7OXXeA5bzRAoGBAINbru3LBlgj850w/imT\nIq7EVNDhpUlxFQLz+wDiUetrXiJwT6m5rCTZY+0LVL9If4qiKUCRqb4+4+V4QpGn\nd+iFtvYpnDzCEHanIdIiFj0Z3Fj65BsxIpUJ+9NfBfScRcYCi7CUVdy90u6c1a7R\nJW8GnjiNhth3Qkf1/VrGWypU\n-----END PRIVATE KEY-----\n",
+  "client_email": "firebase-adminsdk-om2py@fakebusters-1a46c.iam.gserviceaccount.com",
+  "client_id": "104581070638598861053",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-om2py%40fakebusters-1a46c.iam.gserviceaccount.com"
+}
