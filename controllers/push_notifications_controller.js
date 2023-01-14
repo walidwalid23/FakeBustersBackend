@@ -13,10 +13,7 @@ function sendPushNotification(req, res, next) {
                 title: " test notification",
                 body: " this is a test notification"
             },
-            data: {
-                orderID: 324324,
-                orderDate: "28 may"
-            },
+
             // We pass the token of the device that we want to send the push notification to
             // you can pass array of tokens if you want to send the notification to more than one device
             token: req.body.fcm_token
