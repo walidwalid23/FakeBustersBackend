@@ -361,6 +361,8 @@ async function incrementFakeVotes(req, res) {
 
 
                                 // SEND PUSH NOTIFICATION TO THE POST UPLOADER
+                                console.log("token:");
+                                console.log(updatedPost.uploaderNotificationToken);
                                 let notificationContent = {
                                     notification: {
                                         title: "You Have A New Vote On Your Post",
@@ -374,6 +376,7 @@ async function incrementFakeVotes(req, res) {
                                 // now send this reponse as a push notification to the client using fcm
                                 fcmObj.send(notificationContent, function (err, response) {
                                     if (err) {
+                                        console.log(err);
                                         return res.status(500).json({
                                             errorMessage: err,
                                             statusCode: 500
@@ -381,6 +384,7 @@ async function incrementFakeVotes(req, res) {
                                     }
                                     else {
                                         //success
+                                        console.log("push success");
                                     }
 
                                 });
