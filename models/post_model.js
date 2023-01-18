@@ -37,6 +37,11 @@ const postsSchema = mongoose.Schema({
         required: true,
     },
 
+    uploaderNotificationToken: {
+        type: String,
+        required: true,
+    },
+
 });
 
 

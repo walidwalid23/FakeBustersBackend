@@ -2,6 +2,12 @@ const postsCollection = require('../models/post_model');
 const usersCollection = require('../models/user_model');
 const notificationsCollection = require('../models/notification_model');
 const postsValidation = require('./posts_validation_logic');
+// for push notifications
+var admin = require("firebase-admin");
+var fcm = require("fcm-notification");
+var serviceAccount = require("../config/push_notification_key.json");
+const certPath = admin.credential.cert(serviceAccount);
+var fcmObj = new fcm(certPath);
 
 
 async function uploadPost(req, res) {
@@ -22,7 +28,8 @@ async function uploadPost(req, res) {
             productName: req.body.productName,
             brandName: req.body.brandName,
             postImage: imagePath,
-            uploaderID: req.extractedUserData.userID
+            uploaderID: req.extractedUserData.userID,
+            uploaderNotificationToken: req.body.uploaderNotificationToken
         }).save();
 
 
@@ -352,6 +359,32 @@ async function incrementFakeVotes(req, res) {
 
                                 }).save();
 
+
+                                // SEND PUSH NOTIFICATION TO THE POST UPLOADER
+                                let notificationContent = {
+                                    notification: {
+                                        title: "You Have A New Vote On Your Post",
+                                        body: notifierUsername + " Has Voted Fake On Your Post"
+                                    },
+                                    // We pass the token of the device that we want to send the push notification to
+                                    // you can pass array of tokens if you want to send the notification to more than one device
+                                    token: updatedPost.uploaderNotificationToken
+                                }
+
+                                // now send this reponse as a push notification to the client using fcm
+                                fcmObj.send(notificationContent, function (err, response) {
+                                    if (err) {
+                                        return res.status(500).json({
+                                            errorMessage: err,
+                                            statusCode: 500
+                                        });
+                                    }
+                                    else {
+                                        //success
+                                    }
+
+                                });
+
                                 console.log(updatedPost);
                                 return res.status(200).json({
                                     "successMessage": "Voted Successfully",
@@ -415,6 +448,31 @@ async function incrementOriginalVotes(req, res) {
                                     notifierID: notifierID
 
                                 }).save();
+
+                                // SEND PUSH NOTIFICATION TO THE POST UPLOADER
+                                let notificationContent = {
+                                    notification: {
+                                        title: "You Have A New Vote On Your Post",
+                                        body: notifierUsername + " Has Voted Original On Your Post"
+                                    },
+                                    // We pass the token of the device that we want to send the push notification to
+                                    // you can pass array of tokens if you want to send the notification to more than one device
+                                    token: updatedPost.uploaderNotificationToken
+                                }
+
+                                // now send this reponse as a push notification to the client using fcm
+                                fcmObj.send(notificationContent, function (err, response) {
+                                    if (err) {
+                                        return res.status(500).json({
+                                            errorMessage: err,
+                                            statusCode: 500
+                                        });
+                                    }
+                                    else {
+                                        //success
+                                    }
+
+                                });
 
                                 console.log(updatedPost);
                                 return res.status(200).json({

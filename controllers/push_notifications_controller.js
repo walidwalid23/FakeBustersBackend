@@ -1,6 +1,5 @@
 var admin = require("firebase-admin");
 var fcm = require("fcm-notification");
-
 var serviceAccount = require("../config/push_notification_key.json");
 const certPath = admin.credential.cert(serviceAccount);
 var fcmObj = new fcm(certPath);
@@ -13,7 +12,6 @@ function sendPushNotification(req, res, next) {
                 title: " test notification",
                 body: " this is a test notification"
             },
-
             // We pass the token of the device that we want to send the push notification to
             // you can pass array of tokens if you want to send the notification to more than one device
             token: req.body.fcm_token
